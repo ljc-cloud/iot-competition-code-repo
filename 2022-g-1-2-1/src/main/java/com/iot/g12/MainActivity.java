@@ -47,7 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     // 串口服务器IP和端口
     private String ip = "172.20.20.15";
+    // modbus4150端口
     private int modbus4150Port = 6003;
+    // led屏幕端口
     private int ledPort = 6002;
 
     private final Modbus4150 modbus4150 = new Modbus4150(DataBusFactory.newSocketDataBus(ip, modbus4150Port));
