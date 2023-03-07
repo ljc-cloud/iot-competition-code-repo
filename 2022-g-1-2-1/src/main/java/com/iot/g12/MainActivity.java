@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     // 串口服务器IP和端口
     private String ip = "172.20.20.15";
     private int modbus4150Port = 6003;
-    private int ledPort = 6003;
+    private int ledPort = 6002;
 
     private final Modbus4150 modbus4150 = new Modbus4150(DataBusFactory.newSocketDataBus(ip, modbus4150Port));
     private final LedScreen ledScreen = new LedScreen(DataBusFactory.newSocketDataBus(ip, ledPort));
@@ -75,6 +75,11 @@ public class MainActivity extends AppCompatActivity {
                         // 如果旧值等于感应到的红外对射的值
                         if (val != old && val != 1) {
                             if (left <= 0) {
+                                try {
+                                    ledScreen.sendTxt("车位已满", PlayType.LEFT, ShowSpeed.SPEED2, 100, 100);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 Toast.makeText(MainActivity.this, "车库空了", Toast.LENGTH_SHORT).show();
                                 return;
                             }
@@ -95,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 String str = "空位:" + left + "个";
                                 leftText.setText(str);
-                                String template = "已用：" + (total - left) + "个,剩余：" + left + "个";
+                                String template = "已用" + (total - left) + "个,剩余" + left + "个";
                                 try {
-                                    ledScreen.sendTxt(template, PlayType.UP_OVER, ShowSpeed.SPEED2, 100, 100);
+                                    ledScreen.sendTxt(template, PlayType.LEFT, ShowSpeed.SPEED2, 100, 100);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
