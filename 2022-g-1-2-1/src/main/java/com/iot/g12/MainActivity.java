@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 String str = "空位:" + left + "个";
                                 leftText.setText(str);
-                                String template = "已用" + (total - left) + "个,剩余" + left + "个";
+                                String template = "已用" + (total - left) + "个,剩余" + left + "个 ";
                                 try {
-                                    ledScreen.sendTxt(template, PlayType.LEFT, ShowSpeed.SPEED2, 100, 100);
+                                    ledScreen.sendTxt(template, PlayType.LEFT, ShowSpeed.SPEED2, 0, 100);
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                 }
