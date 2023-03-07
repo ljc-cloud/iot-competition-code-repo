@@ -10,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nle.mylibrary.enums.led.PlayType;
+import com.nle.mylibrary.enums.led.ShowSpeed;
+import com.nle.mylibrary.forUse.led.LedScreen;
 import com.nle.mylibrary.forUse.mdbus4150.Modbus4150;
 import com.nle.mylibrary.transfer.DataBusFactory;
 
@@ -44,9 +47,11 @@ public class MainActivity extends AppCompatActivity {
 
     // 串口服务器IP和端口
     private String ip = "172.20.20.15";
-    private int port = 6003;
+    private int modbus4150Port = 6003;
+    private int ledPort = 6003;
 
-    private final Modbus4150 modbus4150 = new Modbus4150(DataBusFactory.newSocketDataBus(ip, port));
+    private final Modbus4150 modbus4150 = new Modbus4150(DataBusFactory.newSocketDataBus(ip, modbus4150Port));
+    private final LedScreen ledScreen = new LedScreen(DataBusFactory.newSocketDataBus(ip, ledPort));
     // 红外对射端口号
     private int irPort = 6;
 
@@ -90,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
                             runOnUiThread(() -> {
                                 String str = "空位:" + left + "个";
                                 leftText.setText(str);
+                                String template = "已用：" + (total - left) + "个,剩余：" + left + "个";
+                                try {
+                                    ledScreen.sendTxt(template, PlayType.UP_OVER, ShowSpeed.SPEED2, 100, 100);
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                             });
                         }
                         old = val;

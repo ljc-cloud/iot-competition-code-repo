@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "iot_code"
 include ':app'
 include ':2022-g-1-2-1'
+include ':2022-g-2-1-1'
