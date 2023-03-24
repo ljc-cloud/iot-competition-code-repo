@@ -53,25 +53,32 @@ public class MainActivity extends AppCompatActivity {
         dataBaseHelper = DataBaseHelper.getInstance(this);
         SQLiteDatabase db = dataBaseHelper.getWritableDatabase();
 
+        // 每个0.2s收集一次数据
         ES.submit(new Runnable() {
             @Override
             public void run() {
                 handler.postDelayed(this, 200);
                 try {
                     modbus4150.getVal(0, val -> {
+                        // 判断是否为重复数据
                         if (val != old) {
                             ContentValues contentValues = new ContentValues();
+                            // 格式化时间
                             String time = simpleDateFormat.format(new Date());
+                            // 存入数据库
                             contentValues.put("time", time);
                             String value = val == 1? "true" : "false";
                             contentValues.put("value", value);
                             db.insert("record", null, null);
+                            // 如果val = 1 ，为开
                             if (val == 1) {
                                 Parking parking = new Parking(id, time, "");
                                 previous = parking;
                                 dataList.add(parking);
                             } else {
+                                // 如果val = 0 ，为关
                                 previous.setCloseTime(time);
+                                // 计算持续时间，单位s
                                 try {
                                     Date open = simpleDateFormat.parse(previous.getOpenTime());
                                     Date close = simpleDateFormat.parse(previous.getCloseTime());
@@ -81,8 +88,10 @@ public class MainActivity extends AppCompatActivity {
                                     throw new RuntimeException(e);
                                 }
                             }
+                            // 呼叫适配器更新数据
                             adapter.notifyDataSetChanged();
                         }
+                        // 更新
                         old = val;
                     });
                 } catch (Exception e) {

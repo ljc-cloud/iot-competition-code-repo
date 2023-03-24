@@ -10,7 +10,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static DataBaseHelper INSTANCE;
     private final static String DB_NAME = "ir_record";
-    private final static String DB_TABLE = "record";
 
     public DataBaseHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
