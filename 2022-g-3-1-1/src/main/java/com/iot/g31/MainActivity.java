@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        tempText = findViewById(R.id.temp_text);
+        humText = findViewById(R.id.hum_text);
+
         ES.submit(new Runnable() {
             @Override
             public void run() {
